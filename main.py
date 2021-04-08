@@ -16,12 +16,15 @@ file_list_column = [
             values=[], enable_events=True, size=(40, 20), key="-FILE LIST-"
         )
     ],
+    [
+        sg.Button('Exit'),
+    ]
 ]
 
 # For now will only show the name of the file that was chosen
 image_viewer_column = [
     [sg.Text("Choose an image from list on left:")],
-    [sg.Text(size=(40, 1), key="-TOUT-")],
+    [sg.Text(size=(30, 1), key="-TOUT-")],
     [sg.Image(key="-IMAGE-")],
 ]
 
@@ -34,7 +37,7 @@ layout = [
     ]
 ]
 
-window = sg.Window("Image Viewer", layout)
+window = sg.Window("Drawing Charts and Applying Functions", layout)
 
 # Run the Event Loop
 while True:
