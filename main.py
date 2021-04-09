@@ -1,9 +1,8 @@
-# img_viewer.py
 
-from charts import *
+from charts import charts_window
 import PySimpleGUI as sg
 import os.path
-
+from charts import *
 # Amber theme
 sg.theme('DarkAmber')
 # First the window layout in 2 columns
@@ -43,7 +42,7 @@ layout_1 = [
 
 
 window_1 = sg.Window("Drawing Charts and Applying Functions", layout_1)
-window_2_active = False
+
 
 # Run the Event Loop
 while True:
@@ -52,7 +51,7 @@ while True:
         break
     # Folder name was filled in, make a list of files in the folder
     if event_1 == "Charts" and not window_2_active:
-        window_2_active = True
+        #window_2_active = True
         window_1.Hide()
         layout_2 = [
             [sg.T('Graph: y=sin(x)')],

@@ -1,6 +1,5 @@
 import PySimpleGUI as sg
 import numpy as np
-from main import window_2_active
 """
     Embedding the Matplotlib toolbar into your application
 """
@@ -51,8 +50,10 @@ layout_2 = [
 
 ]
 
+window_2_active = False
 window_2 = sg.Window('Graph with controls', layout_2)
 def charts_window(window_1, window_2, window_2_active):
+    
     while True:
         event_2, values_2 = window_2.read()
         print(event_2, values_2)
