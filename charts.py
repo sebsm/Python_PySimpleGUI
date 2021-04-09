@@ -1,6 +1,6 @@
 import PySimpleGUI as sg
 import numpy as np
-
+from main import window_2_active
 """
     Embedding the Matplotlib toolbar into your application
 """
@@ -51,14 +51,17 @@ layout_2 = [
 
 ]
 
-chart = sg.Window('Graph with controls', layout_2)
-def temp_func():
+window_2 = sg.Window('Graph with controls', layout_2)
+def charts_window(window_1, window_2, window_2_active):
     while True:
-        event, values = chart.read()
-        print(event, values)
-        if event in (sg.WIN_CLOSED, 'Back'):  # always,  always give a way out!
+        event_2, values_2 = window_2.read()
+        print(event_2, values_2)
+        if event_2 in (sg.WIN_CLOSED, 'Back'):  # always,  always give a way out!
+            window_2.close()
+            window_2_active = False
+            window_1.UnHide()
             break
-        elif event == 'Plot':
+        elif event_2 == 'Plot':
             # ------------------------------- PASTE YOUR MATPLOTLIB CODE HERE
             plt.figure(1)
             fig = plt.gcf()
@@ -75,6 +78,6 @@ def temp_func():
             plt.grid()
 
             # ------------------------------- Instead of plt.show()
-            draw_figure_w_toolbar(chart['fig_cv'].TKCanvas, fig, chart['controls_cv'].TKCanvas)
+            draw_figure_w_toolbar(window_2['fig_cv'].TKCanvas, fig, window_2['controls_cv'].TKCanvas)
 
-chart.close()
+window_2.close()

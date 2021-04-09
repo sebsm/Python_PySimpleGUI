@@ -20,7 +20,7 @@ file_list_column = [
         )
     ],
     [
-        sg.Button('Exit'),sg.Button('Charts')
+        sg.Button('Exit'),sg.Button('Charts'), sg.Button('Windows 2 Status')
     ]
 ]
 
@@ -40,25 +40,7 @@ layout_1 = [
     ]
 ]
 
-layout_2 = [
-    [sg.T('Graph: y=sin(x)')],
-    [sg.B('Plot'), sg.B('Exit')],
-    [sg.T('Controls:')],
-    [sg.Canvas(key='controls_cv')],
-    [sg.T('Figure:')],
-    [sg.Column(
-        layout=[
-            [sg.Canvas(key='fig_cv',
-                       # it's important that you set this size
-                       size=(400 * 2, 400)
-                       )]
-        ],
-        background_color='#DAE0E6',
-        pad=(0, 0)
-    )],
-    [sg.B('Alive?')]
 
-]
 
 window_1 = sg.Window("Drawing Charts and Applying Functions", layout_1)
 window_2_active = False
@@ -72,15 +54,35 @@ while True:
     if event_1 == "Charts" and not window_2_active:
         window_2_active = True
         window_1.Hide()
-        window_2 = sg.Window('Charts', layout_2)
-        while True:
-            event_2, values_2 = window_2.read()
-            if event_2 == sg.WIN_CLOSED or event_2 == 'Exit':
-                window_2.close()
-                window_2_active = False
-                window_1.UnHide()
-                break
-    if event_1 == "-FOLDER-":
+        layout_2 = [
+            [sg.T('Graph: y=sin(x)')],
+            [sg.B('Plot'), sg.B('Back')],
+            [sg.T('Controls:')],
+            [sg.Canvas(key='controls_cv')],
+            [sg.T('Figure:')],
+            [sg.Column(
+                layout=[
+                    [sg.Canvas(key='fig_cv',
+                            # it's important that you set this size
+                            size=(400 * 2, 400)
+                            )]
+                ],
+                background_color='#DAE0E6',
+                pad=(0, 0)
+            )],
+            [sg.B('Alive?')]
+
+        ]
+        window_2 = sg.Window('Chart', layout_2)
+        charts_window(window_1, window_2, window_2_active)
+        # while True:
+        #     event_2, values_2 = window_2.read()
+        #    if event_2 == sg.WIN_CLOSED or event_2 == 'Back':
+        #        window_2.close()
+        #        window_2_active = False
+        #        window_1.UnHide()
+        #        break
+    elif event_1 == "-FOLDER-":
         folder = values_1["-FOLDER-"]
         try:
             # Get list of files in folder
@@ -105,5 +107,7 @@ while True:
 
         except:
             pass
+    elif event_1 == 'Windows 2 Status':
+        print(window_2_active)
 
 window_1.close()
