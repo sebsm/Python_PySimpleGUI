@@ -1,8 +1,11 @@
 # img_viewer.py
 
+from charts import *
 import PySimpleGUI as sg
 import os.path
 
+# Amber theme
+sg.theme('DarkAmber')
 # First the window layout in 2 columns
 
 file_list_column = [
@@ -17,7 +20,7 @@ file_list_column = [
         )
     ],
     [
-        sg.Button('Exit'),
+        sg.Button('Exit'),sg.Button('Charts')
     ]
 ]
 
@@ -29,7 +32,7 @@ image_viewer_column = [
 ]
 
 # ----- Full layout -----
-layout = [
+layout_1 = [
     [
         sg.Column(file_list_column),
         sg.VSeperator(),
@@ -37,16 +40,48 @@ layout = [
     ]
 ]
 
-window = sg.Window("Drawing Charts and Applying Functions", layout)
+layout_2 = [
+    [sg.T('Graph: y=sin(x)')],
+    [sg.B('Plot'), sg.B('Exit')],
+    [sg.T('Controls:')],
+    [sg.Canvas(key='controls_cv')],
+    [sg.T('Figure:')],
+    [sg.Column(
+        layout=[
+            [sg.Canvas(key='fig_cv',
+                       # it's important that you set this size
+                       size=(400 * 2, 400)
+                       )]
+        ],
+        background_color='#DAE0E6',
+        pad=(0, 0)
+    )],
+    [sg.B('Alive?')]
+
+]
+
+window_1 = sg.Window("Drawing Charts and Applying Functions", layout_1)
+window_2_active = False
 
 # Run the Event Loop
 while True:
-    event, values = window.read()
-    if event == "Exit" or event == sg.WIN_CLOSED:
+    event_1, values_1 = window_1.read()
+    if (event_1 == "Exit" or event_1 == sg.WIN_CLOSE_ATTEMPTED_EVENT) and sg.popup_yes_no('Do you really want to quit?') == 'Yes':
         break
     # Folder name was filled in, make a list of files in the folder
-    if event == "-FOLDER-":
-        folder = values["-FOLDER-"]
+    if event_1 == "Charts" and not window_2_active:
+        window_2_active = True
+        window_1.Hide()
+        window_2 = sg.Window('Charts', layout_2)
+        while True:
+            event_2, values_2 = window_2.read()
+            if event_2 == sg.WIN_CLOSED or event_2 == 'Exit':
+                window_2.close()
+                window_2_active = False
+                window_1.UnHide()
+                break
+    if event_1 == "-FOLDER-":
+        folder = values_1["-FOLDER-"]
         try:
             # Get list of files in folder
             file_list = os.listdir(folder)
@@ -59,16 +94,16 @@ while True:
             if os.path.isfile(os.path.join(folder, f))
             and f.lower().endswith((".png", ".gif"))
         ]
-        window["-FILE LIST-"].update(fnames)
-    elif event == "-FILE LIST-":  # A file was chosen from the listbox
+        window_1["-FILE LIST-"].update(fnames)
+    elif event_1 == "-FILE LIST-":  # A file was chosen from the listbox
         try:
             filename = os.path.join(
-                values["-FOLDER-"], values["-FILE LIST-"][0]
+                values_1["-FOLDER-"], values_1["-FILE LIST-"][0]
             )
-            window["-TOUT-"].update(filename)
-            window["-IMAGE-"].update(filename=filename)
+            window_1["-TOUT-"].update(filename)
+            window_1["-IMAGE-"].update(filename=filename)
 
         except:
             pass
 
-window.close()
+window_1.close()
