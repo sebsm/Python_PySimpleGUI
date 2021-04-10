@@ -50,11 +50,16 @@ while True:
     if (event_1 == "Exit" or event_1 == sg.WIN_CLOSE_ATTEMPTED_EVENT) and sg.popup_yes_no('Do you really want to quit?') == 'Yes':
         break
     # Folder name was filled in, make a list of files in the folder
+    
     if event_1 == "Charts" and not window_2_active:
         #window_2_active = True
         window_1.Hide()
         layout_2 = [
-            [sg.T('Graph: y=sin(x)')],
+            [sg.T('Graph')],
+            [sg.T('Choose the type of chart:'),sg.Radio('Sine', 'RADIO1', key='SIN',size=(10,1)),sg.Radio('Cosine', "RADIO1", key = 'COS', size=(10,1))],
+            [sg.T('A:'),sg.Input('', enable_events= True, key='INPUT A')],
+            #sg.T('Y:'),sg.Input('Enter the value', enable_events= True, key='INPUT Y')],
+            #[sg.T('Equation:'),sg.Input('Enter the equation', enable_events= True, key='EQUATION')],
             [sg.B('Plot'), sg.B('Back')],
             [sg.T('Controls:')],
             [sg.Canvas(key='controls_cv')],
@@ -73,14 +78,8 @@ while True:
 
         ]
         window_2 = sg.Window('Chart', layout_2)
+        
         charts_window(window_1, window_2, window_2_active)
-        # while True:
-        #     event_2, values_2 = window_2.read()
-        #    if event_2 == sg.WIN_CLOSED or event_2 == 'Back':
-        #        window_2.close()
-        #        window_2_active = False
-        #        window_1.UnHide()
-        #        break
     elif event_1 == "-FOLDER-":
         folder = values_1["-FOLDER-"]
         try:
@@ -106,7 +105,7 @@ while True:
 
         except:
             pass
-    elif event_1 == 'Windows 2 Status':
-        print(window_2_active)
+    # elif event_1 == 'Windows 2 Status':
+    #     print(window_2_active)
 
 window_1.close()

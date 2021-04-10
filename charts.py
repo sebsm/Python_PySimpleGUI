@@ -6,8 +6,22 @@ import numpy as np
 
 # ------------------------------- This is to include a matplotlib figure in a Tkinter canvas
 import matplotlib.pyplot as plt
+import matplotlib.ticker as tck
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 
+
+# def draw_figure_w_toolbar(canvas, fig, canvas_toolbar):
+#     if canvas.children:
+#         for child in canvas.winfo_children():
+#             child.destroy()
+#     if canvas_toolbar.children:
+#         for child in canvas_toolbar.winfo_children():
+#             child.destroy()
+#     figure_canvas_agg = FigureCanvasTkAgg(fig, master=canvas)
+#     figure_canvas_agg.draw()
+#     toolbar = Toolbar(figure_canvas_agg, canvas_toolbar)
+#     toolbar.update()
+#     figure_canvas_agg.get_tk_widget().pack(side='right', fill='both', expand=1)
 
 def draw_figure_w_toolbar(canvas, fig, canvas_toolbar):
     if canvas.children:
@@ -16,11 +30,16 @@ def draw_figure_w_toolbar(canvas, fig, canvas_toolbar):
     if canvas_toolbar.children:
         for child in canvas_toolbar.winfo_children():
             child.destroy()
-    figure_canvas_agg = FigureCanvasTkAgg(fig, master=canvas)
+    figure_canvas_agg = FigureCanvasTkAgg(fig, canvas)
     figure_canvas_agg.draw()
     toolbar = Toolbar(figure_canvas_agg, canvas_toolbar)
     toolbar.update()
-    figure_canvas_agg.get_tk_widget().pack(side='right', fill='both', expand=1)
+    figure_canvas_agg.get_tk_widget().pack(side='top', fill='both', expand=1)
+    return figure_canvas_agg
+
+def delete_figure_agg(figure_agg):
+    figure_agg.get_tk_widget().forget()
+    plt.close('all')
 
 
 class Toolbar(NavigationToolbar2Tk):
@@ -57,28 +76,60 @@ def charts_window(window_1, window_2, window_2_active):
     while True:
         event_2, values_2 = window_2.read()
         print(event_2, values_2)
+        figure_agg = None
+        if len(values_2['INPUT A']) and values_2['INPUT A'][-1] not in ('0123456789'):
+            # delete last char from input
+            window_2['INPUT A'].update(values_2['INPUT A'][:-1])
+
         if event_2 in (sg.WIN_CLOSED, 'Back'):  # always,  always give a way out!
             window_2.close()
             window_2_active = False
             window_1.UnHide()
             break
-        elif event_2 == 'Plot':
+        elif event_2 == 'Plot' and values_2['SIN'] == True:
             # ------------------------------- PASTE YOUR MATPLOTLIB CODE HERE
+            if figure_agg:
+            # ** IMPORTANT ** Clean up previous drawing before drawing again
+                delete_figure_agg(figure_agg)
+
             plt.figure(1)
-            fig = plt.gcf()
-            DPI = fig.get_dpi()
+            fig1 = plt.gcf()
+            DPI = fig1.get_dpi()
             # ------------------------------- you have to play with this size to reduce the movement error when the mouse hovers over the figure, it's close to canvas size
-            fig.set_size_inches(404 * 2 / float(DPI), 404 / float(DPI))
+            fig1.set_size_inches(404 * 2 / float(DPI), 404 / float(DPI))
             # -------------------------------
-            x = np.linspace(0, 2 * np.pi)
+            x = np.linspace(-4*np.pi/2, 4 * np.pi/2)
+            #x = np.linspace(-10, 10)
             y = np.sin(x)
             plt.plot(x, y)
-            plt.title('y=sin(x)')
+            plt.title('y=f(x)')
             plt.xlabel('X')
             plt.ylabel('Y')
             plt.grid()
-
+            #plt.xaxis.set_major_formatter(tck.FormatStrFormatter('%g $\pi$'))
             # ------------------------------- Instead of plt.show()
-            draw_figure_w_toolbar(window_2['fig_cv'].TKCanvas, fig, window_2['controls_cv'].TKCanvas)
+            figure_agg = draw_figure_w_toolbar(window_2['fig_cv'].TKCanvas, fig1, window_2['controls_cv'].TKCanvas)
+        elif event_2 == 'Plot' and values_2['COS'] == True:
+            # ------------------------------- PASTE YOUR MATPLOTLIB CODE HERE
+            if figure_agg:
+                # ** IMPORTANT ** Clean up previous drawing before drawing again
+                delete_figure_agg(figure_agg)
+            plt.figure(1)
+            fig2 = plt.gcf()
+            DPI = fig2.get_dpi()
+            # ------------------------------- you have to play with this size to reduce the movement error when the mouse hovers over the figure, it's close to canvas size
+            fig2.set_size_inches(404 * 2 / float(DPI), 404 / float(DPI))
+            # -------------------------------
+            x = np.linspace(-4*np.pi/2, 4 * np.pi/2)
+            #x = np.linspace(-10, 10)
+            y = np.cos(x)
+            plt.plot(x, y)
+            plt.title('y=f(x)')
+            plt.xlabel('X')
+            plt.ylabel('Y')
+            #plt.xaxis.set_major_formatter(tck.FormatStrFormatter('%g $\pi$'))
+            
+            # ------------------------------- Instead of plt.show()
+            figure_agg = draw_figure_w_toolbar(window_2['fig_cv'].TKCanvas, fig2, window_2['controls_cv'].TKCanvas)
 
 window_2.close()
