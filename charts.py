@@ -22,7 +22,6 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolb
 #     toolbar = Toolbar(figure_canvas_agg, canvas_toolbar)
 #     toolbar.update()
 #     figure_canvas_agg.get_tk_widget().pack(side='right', fill='both', expand=1)
-
 def draw_figure_w_toolbar(canvas, fig, canvas_toolbar):
     if canvas.children:
         for child in canvas.winfo_children():
@@ -114,7 +113,7 @@ def charts_window(window_1, window_2, window_2_active):
             if figure_agg:
                 # ** IMPORTANT ** Clean up previous drawing before drawing again
                 delete_figure_agg(figure_agg)
-            plt.figure(1)
+            plt.figure(2)
             fig2 = plt.gcf()
             DPI = fig2.get_dpi()
             # ------------------------------- you have to play with this size to reduce the movement error when the mouse hovers over the figure, it's close to canvas size
@@ -127,6 +126,7 @@ def charts_window(window_1, window_2, window_2_active):
             plt.title('y=f(x)')
             plt.xlabel('X')
             plt.ylabel('Y')
+            plt.grid()
             #plt.xaxis.set_major_formatter(tck.FormatStrFormatter('%g $\pi$'))
             
             # ------------------------------- Instead of plt.show()
