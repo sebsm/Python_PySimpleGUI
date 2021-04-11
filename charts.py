@@ -131,5 +131,24 @@ def charts_window(window_1, window_2, window_2_active):
             
             # ------------------------------- Instead of plt.show()
             figure_agg = draw_figure_w_toolbar(window_2['fig_cv'].TKCanvas, fig2, window_2['controls_cv'].TKCanvas)
+        elif event_2 == 'Plot' and values_2['LINEAR'] == True and values_2['INPUT A']== True and values_2['INPUT B']== True:
+            if figure_agg:
+                # ** IMPORTANT ** Clean up previous drawing before drawing again
+                delete_figure_agg(figure_agg)
+            plt.figure(3)
+            fig2 = plt.gcf()
+            DPI = fig2.get_dpi()
+            # ------------------------------- you have to play with this size to reduce the movement error when the mouse hovers over the figure, it's close to canvas size
+            fig2.set_size_inches(404 * 2 / float(DPI), 404 / float(DPI))
+            # -------------------------------
+            x = np.linspace(-10, 10)
+            #x = np.linspace(-10, 10)
+            y = int(values_2['INPUT A']) * x + int(values_2['INPUT B'])
+            plt.plot(x, y)
+            plt.title('y=f(x)')
+            plt.xlabel('X')
+            plt.ylabel('Y')
+            plt.grid()
+            #plt.xaxis.set_major_formatter(tck.FormatStrFormatter('%g $\pi$'))
 
 window_2.close()

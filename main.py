@@ -56,8 +56,8 @@ while True:
         window_1.Hide()
         layout_2 = [
             [sg.T('Graph')],
-            [sg.T('Choose the type of chart:'),sg.Radio('Sine', 'RADIO1', key='SIN',size=(10,1)),sg.Radio('Cosine', "RADIO1", key = 'COS', size=(10,1))],
-            [sg.T('A:'),sg.Input('', enable_events= True, key='INPUT A')],
+            [sg.T('Choose the type of chart:'),sg.Radio('Sine', 'RADIO1', key='SIN',size=(10,1)),sg.Radio('Cosine', "RADIO1", key = 'COS', size=(10,1)),sg.Radio('Linear', "RADIO1", key = 'LINEAR', size=(10,1))],
+            [sg.T('A:'),sg.Input('', enable_events= True, key='INPUT A')], [sg.T('B:'),sg.Input('', enable_events= True, key='INPUT B')],
             #sg.T('Y:'),sg.Input('Enter the value', enable_events= True, key='INPUT Y')],
             #[sg.T('Equation:'),sg.Input('Enter the equation', enable_events= True, key='EQUATION')],
             [sg.B('Plot'), sg.B('Back')],
