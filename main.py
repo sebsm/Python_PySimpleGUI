@@ -19,7 +19,7 @@ file_list_column = [
         )
     ],
     [
-        sg.Button('Exit'),sg.Button('Charts'), sg.Button('Windows 2 Status')
+        sg.Button('Exit'),sg.Button('Charts'),sg.Button('Solver'),
     ]
 ]
 
