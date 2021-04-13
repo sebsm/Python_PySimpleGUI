@@ -3,6 +3,7 @@ from charts import charts_window
 import PySimpleGUI as sg
 import os.path
 from charts import *
+from quadratic_solver import *
 # Amber theme
 sg.theme('DarkAmber')
 # First the window layout in 2 columns
@@ -83,9 +84,17 @@ while True:
     elif event_1 == 'Solver' and not window_3_active:
         window_1.Hide()
         layout_3 = [
-            
+            [sg.T('a', key='lbl_a',font='consalo 14'), sg.I('', key='edit_a', size=(10,1),pad=(10,10)),
+            sg.T('b', key='lbl_b', font='consalo 14'), sg.I('', key='edit_b', size=(10,1),pad=(10,10)),
+            sg.T('c', key='lbl_c', font='consalo 14'), sg.I('', key='edit_c', size=(10,1),pad=(10,10))],
+            [sg.B('Calculate', key='calc', border_width=5, pad=(10,10))],
+            [sg.T('x1', key='lbl_x1', font='consalo 14'), sg.I('', key='x1', size=(15,1),pad=(10,10))],
+            [sg.T('x2', key='lbl_x2', font='consalo 14'), sg.I('', key='x2', size=(15,1),pad=(10,10))],
+            [sg.B('Back')]
         ]
+        window_3 = sg.Window('Solver', layout_3)
 
+        solver(window_1, window_3, window_3_active)
 
     elif event_1 == "-FOLDER-":
         folder = values_1["-FOLDER-"]
