@@ -80,6 +80,13 @@ while True:
         window_2 = sg.Window('Chart', layout_2)
         
         charts_window(window_1, window_2, window_2_active)
+    elif event_1 == 'Solver' and not window_3_active:
+        window_1.Hide()
+        layout_3 = [
+            
+        ]
+
+
     elif event_1 == "-FOLDER-":
         folder = values_1["-FOLDER-"]
         try:
