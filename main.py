@@ -90,7 +90,7 @@ while True:
             [sg.B('Calculate', key='calc', border_width=5, pad=(10,10))],
             [sg.T('x1', key='lbl_x1', font='consalo 14'), sg.I('', key='x1', size=(15,1),pad=(10,10))],
             [sg.T('x2', key='lbl_x2', font='consalo 14'), sg.I('', key='x2', size=(15,1),pad=(10,10))],
-            [sg.B('Back')]
+            [sg.B('Back')],
         ]
         window_3 = sg.Window('Solver', layout_3)
 
