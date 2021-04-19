@@ -9,19 +9,27 @@ import psycopg2
 sg.theme('DarkAmber')
 # First the window layout in 2 columns
 if __name__=="__main__":
-    conn = psycopg2.connect(
+    try:
+        conn = psycopg2.connect(
         dbname="APP",
         host="localhost",
-        
         user="postgres",
-        password = 's197328645S!'
-    )
+        password = 's197328645S!'    
+        )
+        print('Success!')
+    except:
+        print('Cannot connect to databse') 
 
     cur = conn.cursor()
 
     # Database init
-    cur.execute('CREATE TABLE goods (id serial PRIMARY KEY, name varchar, value float, quantity int);')
-    cur.execute("INSERT INTO goods (name, value, quantity) VALUES ('Apple', 15.5, 10);")
+    try:
+        cur.execute("CREATE TABLE goods (id serial PRIMARY KEY, name varchar, value numeric(4,2), quantity integer);")
+        cur.execute("INSERT INTO goods (name, value, quantity) VALUES ('Apple', 15.5, 10);")
+        print('Table created, record inserted')
+    except:
+        print('Failure!')
+    
     file_list_column = [
         [
             sg.Text("Image Folder"),
