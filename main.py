@@ -5,6 +5,7 @@ import os.path
 from charts import *
 from quadratic_solver import *
 import psycopg2
+from goods import *
 # Amber theme
 sg.theme('DarkAmber')
 # First the window layout in 2 columns
@@ -24,8 +25,9 @@ if __name__=="__main__":
 
     # Database init
     try:
-        cur.execute("CREATE TABLE goods (id serial PRIMARY KEY, name varchar, value numeric(4,2), quantity integer);")
+        cur.execute("CREATE TABLE IF NOT EXISTS  goods (id serial NOT NULL, PRIMARY KEY (id), name text, value numeric(4,2), quantity integer);")
         cur.execute("INSERT INTO goods (name, value, quantity) VALUES ('Apple', 15.5, 10);")
+        conn.commit()
         print('Table created, record inserted')
     except:
         print('Failure!')
@@ -118,6 +120,26 @@ if __name__=="__main__":
 
             solver(window_1, window_3, window_3_active)
 
+        elif event_1 == 'Item management' and not window_4_active:
+            window_1.Hide()
+
+            tab1_layout = [
+                [sg.T('Add item')],
+                [sg.T('Name:')], [sg.In(key = 'Name_1')],
+                [sg.T('Value:')], [sg.In(key = 'Value_1')],
+                [sg.T('Quantity:')], [sg.In(key = 'Quantity_1')],
+                [sg.B('Submit')]]
+            tab2_layout = [[sg.T('Update item')]]
+            tab3_layout = [[sg.T('Delete item')]]
+
+
+            layout_4 = [[sg.TabGroup([[sg.Tab('Add', tab1_layout), sg.Tab('Update', tab2_layout),sg.Tab('Delete', tab3_layout)]])],
+                        [sg.Button('Back')]
+            ]
+            window_4 = sg.Window('Item management', layout_4)
+
+            goods(window_1, window_4, window_4_active, cur, conn)
+
         elif event_1 == "-FOLDER-":
             folder = values_1["-FOLDER-"]
             try:
@@ -143,7 +165,5 @@ if __name__=="__main__":
 
             except:
                 pass
-        # elif event_1 == 'Windows 2 Status':
-        #     print(window_2_active)
 
     window_1.close()
