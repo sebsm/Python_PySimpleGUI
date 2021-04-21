@@ -128,13 +128,32 @@ if __name__=="__main__":
                 [sg.T('Name:')], [sg.In(key = 'Name_1')],
                 [sg.T('Value:')], [sg.In(key = 'Value_1')],
                 [sg.T('Quantity:')], [sg.In(key = 'Quantity_1')],
-                [sg.B('Submit')]]
-            tab2_layout = [[sg.T('Update item')]]
-            tab3_layout = [[sg.T('Delete item')]]
+                [sg.B('Add')]]
+            tab2_layout = [
+                [sg.T('Update item')],
+                [sg.T('Name:')], [sg.In(key = 'Name_2')],
+                [sg.T('Value:')], [sg.In(key = 'Value_2')],
+                [sg.T('Quantity:')], [sg.In(key = 'Quantity_2')],
+                [sg.B('Update')]
+                ]
+            tab3_layout = [
+                [sg.T('Delete item')],
+                [sg.T('Name:')], [sg.In(key = 'Name_3')],
+                [sg.B('Delete')]
+                ]
 
+            headings = ['ID', 'NAME', 'VALUE','QUANTITY']
 
-            layout_4 = [[sg.TabGroup([[sg.Tab('Add', tab1_layout), sg.Tab('Update', tab2_layout),sg.Tab('Delete', tab3_layout)]])],
-                        [sg.Button('Back')]
+            header =  [
+                [sg.T('Display records')],
+                [sg.Text('  ')] + [sg.Text(h, size=(14,1)) for h in headings]
+            ]
+
+            input_rows = [[sg.Text('  ',size=(15,1), pad=(0,0)) for col in range(4)] for row in range(10)]
+
+            tab4_layout = header + input_rows
+            layout_4 = [[sg.TabGroup([[sg.Tab('Add_t', tab1_layout), sg.Tab('Update_t', tab2_layout),sg.Tab('Delete_t', tab3_layout),sg.Tab('Show_t', tab4_layout)]])],
+                        [sg.Button('Back'),sg.Button('Check the amount of records')]
             ]
             window_4 = sg.Window('Item management', layout_4)
 

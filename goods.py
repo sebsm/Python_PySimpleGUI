@@ -22,14 +22,22 @@ tab3_layout = [
     [sg.T('Name:')], [sg.In(key = 'Name_3')],
     [sg.B('Delete')]
     ]
-tab4_layout = [
-    [sg.T('Display records')],
-    [sg.T('Name:')], [sg.In(key = 'Name_3')],
-    [sg.B('Delete')]
-    ]
 
-layout_4 = [[sg.TabGroup([[sg.Tab('Add', tab1_layout), sg.Tab('Update', tab2_layout),sg.Tab('Delete', tab3_layout)]])],
-            [sg.Button('Back')]
+headings = ['ID', 'NAME', 'VALUE','QUANTITY']
+
+header =  [
+    [sg.T('Display records')],
+    [sg.Text('  ')] + [sg.Text(h, size=(14,1)) for h in headings]
+]
+
+input_rows = [[sg.Text('  ',size=(15,1), pad=(0,0)) for col in range(4)] for row in range(10)]
+
+tab4_layout = header + input_rows
+
+
+
+layout_4 = [[sg.TabGroup([[sg.Tab('Add_t', tab1_layout), sg.Tab('Update_t', tab2_layout),sg.Tab('Delete_t', tab3_layout),sg.Tab('Show_t', tab4_layout)]])],
+            [sg.Button('Back'), sg.Button('Check the amount of records')]
 ]
 window_4_active = False
 
@@ -70,4 +78,13 @@ def goods(window_1, window_4, window_4_active, cur, conn):
                 print('Failure!')
                 sg.popup('There is no such record!')
                 print(values_4['Name_3'])
+        elif event_4 == 'Check the amount of records':
+            try:
+                cur.execute("SELECT COUNT(*) FROM goods;")
+                count = cur.fetchone()
+                conn.commit()
+                print(count[0])
+            except:
+                print('Failure!')
+                sg.popup('Incorrect query')
 window_4.close()
