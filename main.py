@@ -26,9 +26,9 @@ if __name__=="__main__":
     # Database init
     try:
         cur.execute("CREATE TABLE IF NOT EXISTS  goods (id serial NOT NULL, PRIMARY KEY (id), name text, value numeric(4,2), quantity integer);")
-        cur.execute("INSERT INTO goods (name, value, quantity) VALUES ('Apple', 15.5, 10);")
+        #cur.execute("INSERT INTO goods (name, value, quantity) VALUES ('Apple', 15.5, 10);")
         conn.commit()
-        print('Table created, record inserted')
+        print('Table created')
     except:
         print('Failure!')
     
