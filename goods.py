@@ -84,7 +84,20 @@ def goods(window_1, window_4, window_4_active, cur, conn):
                 count = cur.fetchone()
                 conn.commit()
                 print(count[0])
+                # cur.execute("SELECT * FROM goods;")
+                # every = cur.fetchall()
+                # print(every)
+                # for i,j,k,l in every:
+                #     print(i)
+                #     print(j)
+                #     print(k)
+                #     print(l)
+                # for i in range(len(every)):
+                #     for j in range(len(every)):
+                #         print(every[i][j])
             except:
                 print('Failure!')
                 sg.popup('Incorrect query')
+
+        
 window_4.close()

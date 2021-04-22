@@ -142,15 +142,59 @@ if __name__=="__main__":
                 [sg.B('Delete')]
                 ]
 
-            headings = ['ID', 'NAME', 'VALUE','QUANTITY']
+            cur.execute("SELECT * FROM goods;")
+            every = cur.fetchall()
+            ids = []
+            names= []
+            values = []
+            quantities = []
+            # print(every)
+            for i,j,k,l in every:
+                ids.append(i)
+                names.append(j)
+                values.append(k)
+                quantities.append(l)
 
+            headings = ['ID','NAME','VALUE','QUANTITY']
+
+
+            
             header =  [
                 [sg.T('Display records')],
-                [sg.Text('  ')] + [sg.Text(h, size=(14,1)) for h in headings]
+                [sg.Text(h,size=(14,1), pad=(3,3)) for h in headings]
             ]
 
-            input_rows = [[sg.Text('  ',size=(15,1), pad=(0,0)) for col in range(4)] for row in range(10)]
+            id_row = [
+                [(sg.Text(i,size=(15,1), pad=(0,0))) for i in ids]
+            ]
+            name_row = [
+                [(sg.Text(j,size=(15,1), pad=(0,0))) for j in names]
+            ]
+            value_row = [
+                [(sg.Text(k,size=(15,1), pad=(0,0))) for k in values]
+            ]
+            quantity_row = [
+                [(sg.Text(l,size=(15,1), pad=(0,0))) for l in quantities]
+            ]
 
+            rows =[
+                [((sg.Text(' '+ str(i),size=(15,1), pad=(0,0))),(sg.Text(' '+ str(j),size=(15,1), pad=(0,0))),(sg.Text(' '+ str(k),size=(15,1), pad=(0,0))),(sg.Text(' '+ str(l),size=(15,1), pad=(0,0)))) for i,j,k,l in every]
+            ]
+            # for i,j,k,l in every:
+            #     rows = [i,j,k,l]
+            #     print(rows)
+                # id_row = [[(sg.Text(i,size=(15,1), pad=(0,0))) for row in range(10)]]
+                # name_row = [[(sg.Text(j,size=(15,1), pad=(0,0))) for row in range(10)]]
+                # value_row = [[(sg.Text(k,size=(15,1), pad=(0,0))) for row in range(10)]]
+                # quantity_row = [[(sg.Text(l,size=(15,1), pad=(0,0))) for row in range(10)]]
+                
+            #input_rows = [[sg.Text('ok',size=(15,1), pad=(0,0)) for col in range(4)] for row in range(10)]
+            # input_rows = [
+            #     [(sg.Text(i,size=(15,1), pad=(0,0)),sg.Text(j,size=(15,1), pad=(0,0)),sg.Text(k,size=(15,1), pad=(0,0)),sg.Text(l,size=(15,1), pad=(0,0))) for i,j,k,l in every] for row in range(10)
+            #     ]
+            #input_rows = id_row + name_row + value_row + quantity_row
+            
+            input_rows = rows[0]
             tab4_layout = header + input_rows
             layout_4 = [[sg.TabGroup([[sg.Tab('Add_t', tab1_layout), sg.Tab('Update_t', tab2_layout),sg.Tab('Delete_t', tab3_layout),sg.Tab('Show_t', tab4_layout)]])],
                         [sg.Button('Back'),sg.Button('Check the amount of records')]
