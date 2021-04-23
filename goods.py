@@ -70,7 +70,10 @@ def goods(window_1, window_4, window_4_active, cur, conn, layout_4):
             break
         elif event_4 == 'Add':
             try:
-                cur.execute("INSERT INTO goods (name, value, quantity) VALUES (%s, %s, %s);",(values_4['Name_1'], float(values_4['Value_1']), int(values_4['Quantity_1'])))
+                SQL = "INSERT INTO goods (name, value, quantity) VALUES (%s, %s, %s);"
+                data = (values_4['Name_1'], float(values_4['Value_1']), int(values_4['Quantity_1']))
+                #cur.execute("INSERT INTO goods (name, value, quantity) VALUES (%s, %s, %s);",(values_4['Name_1'], float(values_4['Value_1']), int(values_4['Quantity_1'])))
+                cur.execute(SQL, data)
                 conn.commit()
                 print('Record inserted')
             except:
@@ -78,7 +81,10 @@ def goods(window_1, window_4, window_4_active, cur, conn, layout_4):
                 print(values_4['Name_1'], values_4['Value_1'], values_4['Quantity_1'])
         elif event_4 == 'Update':
             try:
-                cur.execute("UPDATE goods SET value=%s, quantity=%s WHERE name=%s;",(float(values_4['Value_2']), int(values_4['Quantity_2']),values_4['Name_2']))
+                SQL = "UPDATE goods SET value= %s, quantity= %s WHERE name= %s;"
+                data = (float(values_4['Value_2']), int(values_4['Quantity_2']),values_4['Name_2'])
+                #cur.execute("UPDATE goods SET value= %s, quantity=%s WHERE name=%s;",(float(values_4['Value_2']), int(values_4['Quantity_2']),values_4['Name_2']))
+                cur.execute(SQL, data)
                 conn.commit()
                 print('Record updated')
             except:
