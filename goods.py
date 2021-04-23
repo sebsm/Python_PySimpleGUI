@@ -2,6 +2,21 @@ import PySimpleGUI as sg
 from math import sqrt
 from PySimpleGUI.PySimpleGUI import Submit, WINDOW_CLOSED
 
+# for i,j,k,l in every:
+            #     rows = [i,j,k,l]
+            #     print(rows)
+                # id_row = [[(sg.Text(i,size=(15,1), pad=(0,0))) for row in range(10)]]
+                # name_row = [[(sg.Text(j,size=(15,1), pad=(0,0))) for row in range(10)]]
+                # value_row = [[(sg.Text(k,size=(15,1), pad=(0,0))) for row in range(10)]]
+                # quantity_row = [[(sg.Text(l,size=(15,1), pad=(0,0))) for row in range(10)]]
+                
+            #input_rows = [[sg.Text('ok',size=(15,1), pad=(0,0)) for col in range(4)] for row in range(10)]
+            # input_rows = [
+            #     [(sg.Text(i,size=(15,1), pad=(0,0)),sg.Text(j,size=(15,1), pad=(0,0)),sg.Text(k,size=(15,1), pad=(0,0)),sg.Text(l,size=(15,1), pad=(0,0))) for i,j,k,l in every] for row in range(10)
+            #     ]
+            #input_rows = id_row + name_row + value_row + quantity_row
+
+
 tab1_layout = [
     [sg.T('Add item')],
     [sg.T('Name:')], [sg.In(key = 'Name_1')],
@@ -19,32 +34,33 @@ tab2_layout = [
     ]
 tab3_layout = [
     [sg.T('Delete item')],
-    [sg.T('Name:')], [sg.In(key = 'Name_3')],
+    [sg.T('Name:')], [sg.In(key ='Name_3')],
     [sg.B('Delete')]
     ]
 
-headings = ['ID', 'NAME', 'VALUE','QUANTITY']
+# headings = ['ID', 'NAME', 'VALUE','QUANTITY']
 
-header =  [
-    [sg.T('Display records')],
-    [sg.Text('  ')] + [sg.Text(h, size=(14,1)) for h in headings]
-]
+# header =  [
+#     [sg.T('Display records')],
+#     [sg.Text('  ')] + [sg.Text(h, size=(14,1)) for h in headings]
+# ]
 
-input_rows = [[sg.Text('  ',size=(15,1), pad=(0,0)) for col in range(4)] for row in range(10)]
+# input_rows = [[sg.Text('  ',size=(15,1), pad=(0,0)) for col in range(4)] for row in range(10)]
 
-tab4_layout = header + input_rows
+# tab4_layout = header + input_rows
 
 
 
-layout_4 = [[sg.TabGroup([[sg.Tab('Add_t', tab1_layout), sg.Tab('Update_t', tab2_layout),sg.Tab('Delete_t', tab3_layout),sg.Tab('Show_t', tab4_layout)]])],
-            [sg.Button('Back'), sg.Button('Check the amount of records')]
-]
+# layout_4 = [[sg.TabGroup([[sg.Tab('Add_t', tab1_layout), sg.Tab('Update_t', tab2_layout),sg.Tab('Delete_t', tab3_layout),sg.Tab('Show_t', tab4_layout)]])],
+#             [sg.Button('Back'), sg.Button('Check the amount of records')]
+# ]
+#window_4 = sg.Window('Goods', layout_4)
 window_4_active = False
 
-window_4 = sg.Window('Goods', layout_4)
 
 
-def goods(window_1, window_4, window_4_active, cur, conn):
+
+def goods(window_1, window_4, window_4_active, cur, conn, layout_4):
     while True:
         event_4, values_4 = window_4.read()
         if event_4 in (sg.WIN_CLOSED, 'Back'):
@@ -71,7 +87,9 @@ def goods(window_1, window_4, window_4_active, cur, conn):
                 print(values_4['Name_2'], values_4['Value_2'], values_4['Quantity_2'])
         elif event_4 == 'Delete':
             try:
-                cur.execute("DELETE FROM goods WHERE name=%s;",(values_4['Name_1']))
+                SQL = "DELETE FROM goods WHERE name = (%s);"
+                data = (values_4['Name_3'],)
+                cur.execute(SQL, data)
                 conn.commit()
                 print('Record deleted')
             except:
@@ -84,6 +102,7 @@ def goods(window_1, window_4, window_4_active, cur, conn):
                 count = cur.fetchone()
                 conn.commit()
                 print(count[0])
+                sg.popup(('Number of records: ',count[0])) 
                 # cur.execute("SELECT * FROM goods;")
                 # every = cur.fetchall()
                 # print(every)
@@ -98,6 +117,9 @@ def goods(window_1, window_4, window_4_active, cur, conn):
             except:
                 print('Failure!')
                 sg.popup('Incorrect query')
-
-        
-window_4.close()
+        elif event_4 == "Show_t":
+            try:
+                window_4 = sg.Window('Goods', layout_4)
+            except:
+                sg.popup('Invalid operation!')
+    window_4.close()    

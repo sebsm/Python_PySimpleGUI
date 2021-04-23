@@ -25,7 +25,7 @@ if __name__=="__main__":
 
     # Database init
     try:
-        cur.execute("CREATE TABLE IF NOT EXISTS  goods (id serial NOT NULL, PRIMARY KEY (id), name text, value numeric(4,2), quantity integer);")
+        cur.execute("CREATE TABLE IF NOT EXISTS  goods (id serial NOT NULL, PRIMARY KEY (id), name varchar, value numeric(4,2), quantity integer);")
         #cur.execute("INSERT INTO goods (name, value, quantity) VALUES ('Apple', 15.5, 10);")
         conn.commit()
         print('Table created')
@@ -180,19 +180,7 @@ if __name__=="__main__":
             rows =[
                 [((sg.Text(' '+ str(i),size=(15,1), pad=(0,0))),(sg.Text(' '+ str(j),size=(15,1), pad=(0,0))),(sg.Text(' '+ str(k),size=(15,1), pad=(0,0))),(sg.Text(' '+ str(l),size=(15,1), pad=(0,0)))) for i,j,k,l in every]
             ]
-            # for i,j,k,l in every:
-            #     rows = [i,j,k,l]
-            #     print(rows)
-                # id_row = [[(sg.Text(i,size=(15,1), pad=(0,0))) for row in range(10)]]
-                # name_row = [[(sg.Text(j,size=(15,1), pad=(0,0))) for row in range(10)]]
-                # value_row = [[(sg.Text(k,size=(15,1), pad=(0,0))) for row in range(10)]]
-                # quantity_row = [[(sg.Text(l,size=(15,1), pad=(0,0))) for row in range(10)]]
-                
-            #input_rows = [[sg.Text('ok',size=(15,1), pad=(0,0)) for col in range(4)] for row in range(10)]
-            # input_rows = [
-            #     [(sg.Text(i,size=(15,1), pad=(0,0)),sg.Text(j,size=(15,1), pad=(0,0)),sg.Text(k,size=(15,1), pad=(0,0)),sg.Text(l,size=(15,1), pad=(0,0))) for i,j,k,l in every] for row in range(10)
-            #     ]
-            #input_rows = id_row + name_row + value_row + quantity_row
+            
             
             input_rows = rows[0]
             tab4_layout = header + input_rows
@@ -201,7 +189,7 @@ if __name__=="__main__":
             ]
             window_4 = sg.Window('Item management', layout_4)
 
-            goods(window_1, window_4, window_4_active, cur, conn)
+            goods(window_1, window_4, window_4_active, cur, conn,layout_4)
 
         elif event_1 == "-FOLDER-":
             folder = values_1["-FOLDER-"]
