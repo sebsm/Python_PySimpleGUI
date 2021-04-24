@@ -1,7 +1,7 @@
 import PySimpleGUI as sg
 from math import sqrt
 from PySimpleGUI.PySimpleGUI import Submit, WINDOW_CLOSED
-
+from records import *
 # for i,j,k,l in every:
             #     rows = [i,j,k,l]
             #     print(rows)
@@ -102,30 +102,57 @@ def goods(window_1, window_4, window_4_active, cur, conn, layout_4):
                 print('Failure!')
                 sg.popup('There is no such record!')
                 print(values_4['Name_3'])
-        elif event_4 == 'Check the amount of records':
-            try:
-                cur.execute("SELECT COUNT(*) FROM goods;")
-                count = cur.fetchone()
-                conn.commit()
-                print(count[0])
-                sg.popup(('Number of records: ',count[0])) 
-                # cur.execute("SELECT * FROM goods;")
-                # every = cur.fetchall()
-                # print(every)
-                # for i,j,k,l in every:
-                #     print(i)
-                #     print(j)
-                #     print(k)
-                #     print(l)
-                # for i in range(len(every)):
-                #     for j in range(len(every)):
-                #         print(every[i][j])
-            except:
-                print('Failure!')
-                sg.popup('Incorrect query')
-        elif event_4 == "Show_t":
-            try:
-                window_4 = sg.Window('Goods', layout_4)
-            except:
-                sg.popup('Invalid operation!')
+        
+        elif event_4 == 'Show records' and not window_5_active:
+            window_4.Hide()
+            cur.execute("SELECT * FROM goods;")
+            every = cur.fetchall()
+            ids = []
+            names= []
+            values = []
+            quantities = []
+            # print(every)
+            for i,j,k,l in every:
+                ids.append(i)
+                names.append(j)
+                values.append(k)
+                quantities.append(l)
+
+            headings = ['ID','NAME','VALUE','QUANTITY']
+
+
+            
+            header =  [
+                [sg.T('Display records')],
+                [sg.Text(h,size=(14,1), pad=(3,3)) for h in headings]
+            ]
+
+            id_row = [
+                [(sg.Text(i,size=(15,1), pad=(0,0))) for i in ids]
+            ]
+            name_row = [
+                [(sg.Text(j,size=(15,1), pad=(0,0))) for j in names]
+            ]
+            value_row = [
+                [(sg.Text(k,size=(15,1), pad=(0,0))) for k in values]
+            ]
+            quantity_row = [
+                [(sg.Text(l,size=(15,1), pad=(0,0))) for l in quantities]
+            ]
+
+            rows =[
+                [((sg.Text(' '+ str(i),size=(15,1), pad=(0,0))),(sg.Text(' '+ str(j),size=(15,1), pad=(0,0))),(sg.Text(' '+ str(k),size=(15,1), pad=(0,0))),(sg.Text(' '+ str(l),size=(15,1), pad=(0,0)))) for i,j,k,l in every]
+            ]
+            
+            
+            input_rows = rows[0]
+            tab5_layout = header + input_rows
+            #,sg.Tab('Show_t', tab4_layout)
+            back = [
+                [sg.Button('Back'),sg.Button('Check the amount of records')]
+            ]
+            layout_5 = header + input_rows + back
+            window_5 = sg.Window('Records', layout_5)
+
+            show(window_4, window_5, window_5_active, cur, conn,layout_5)
     window_4.close()    
