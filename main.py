@@ -44,7 +44,7 @@ if __name__=="__main__":
             )
         ],
         [
-            sg.Button('Exit'),sg.Button('Charts'),sg.Button('Solver'),sg.Button('Item management')
+            sg.Button('Exit'),sg.Button('Charts'),sg.Button('Quadratic Solver'),sg.Button('Item management')
         ]
     ]
 
