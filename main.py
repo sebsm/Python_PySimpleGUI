@@ -4,6 +4,7 @@ import PySimpleGUI as sg
 import os.path
 from charts import *
 from quadratic_solver import *
+from cubic_solver import *
 import psycopg2
 from goods import *
 # Amber theme
@@ -44,7 +45,7 @@ if __name__=="__main__":
             )
         ],
         [
-            sg.Button('Exit'),sg.Button('Charts'),sg.Button('Quadratic Solver'),sg.Button('Item management')
+            sg.Button('Exit'),sg.Button('Charts'),sg.Button('Quadratic Solver'),sg.Button('Cubic Solver'),sg.Button('Item management')
         ]
     ]
 
@@ -105,7 +106,7 @@ if __name__=="__main__":
             window_2 = sg.Window('Chart', layout_2)
             
             charts_window(window_1, window_2, window_2_active)
-        elif event_1 == 'Solver' and not window_3_active:
+        elif event_1 == 'Quadratic Solver' and not window_3_active:
             window_1.Hide()
             layout_3 = [
                 [sg.T('a', key='lbl_a',font='consalo 14'), sg.I('', key='edit_a', size=(10,1),pad=(10,10)),
@@ -116,9 +117,26 @@ if __name__=="__main__":
                 [sg.T('x2', key='lbl_x2', font='consalo 14'), sg.I('', key='x2', size=(15,1),pad=(10,10))],
                 [sg.B('Back')],
             ]
-            window_3 = sg.Window('Solver', layout_3)
+            window_3 = sg.Window('Quadr Solver', layout_3)
 
-            solver(window_1, window_3, window_3_active)
+            quadr_solver(window_1, window_3, window_3_active)
+        
+        elif event_1 == 'Cubic Solver' and not window_6_active:
+            window_1.Hide()
+            layout_6 = [
+                [sg.T('a', key='lbl_a',font='consalo 14'), sg.I('', key='edit_a', size=(10,1),pad=(10,10)),
+                sg.T('b', key='lbl_b', font='consalo 14'), sg.I('', key='edit_b', size=(10,1),pad=(10,10)),
+                sg.T('c', key='lbl_c', font='consalo 14'), sg.I('', key='edit_c', size=(10,1),pad=(10,10)),
+                sg.T('d', key='lbl_d', font='consalo 14'), sg.I('', key='edit_d', size=(10,1),pad=(10,10))],
+                [sg.B('Calculate', key='calc', border_width=5, pad=(10,10))],
+                [sg.T('x1', key='lbl_x1', font='consalo 14'), sg.I('', key='x1', size=(50,1),pad=(10,10))],
+                [sg.T('x2', key='lbl_x2', font='consalo 14'), sg.I('', key='x2', size=(50,1),pad=(10,10))],
+                [sg.T('x3', key='lbl_x3', font='consalo 14'), sg.I('', key='x3', size=(50,1),pad=(10,10))],
+                [sg.B('Back')],
+            ]
+            window_6 = sg.Window('Cub Solver', layout_6)
+
+            cubic_solver(window_1, window_6, window_6_active)
 
         elif event_1 == 'Item management' and not window_4_active:
             window_1.Hide()

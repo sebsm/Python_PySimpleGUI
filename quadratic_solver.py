@@ -27,7 +27,7 @@ layout_3 = [
 window_3_active = False
 window_3 = sg.Window('Quadratic solver', layout_3)
 
-def solver(window_1, window_3, window_3_active):
+def quadr_solver(window_1, window_3, window_3_active):
     while True:
         event_3, values_3 = window_3.read()
         if event_3 in (sg.WIN_CLOSED, 'Back'):
