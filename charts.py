@@ -75,6 +75,8 @@ window_2 = sg.Window('Graph with controls', layout_2)
 def charts_window(window_1, window_2, window_2_active):
     flag_linear = 0
     figure_agg = None
+    flag_custom = 0
+    flag_log = 0
     while True:
         event_2, values_2 = window_2.read()
         print(event_2, values_2)
@@ -161,5 +163,49 @@ def charts_window(window_1, window_2, window_2_active):
             plt.grid()
             figure_agg = draw_figure_w_toolbar(window_2['fig_cv'].TKCanvas, fig3, window_2['controls_cv'].TKCanvas)
             flag_linear = 1
+        elif event_2 == 'Plot' and values_2['CUSTOM'] == True:
+            if flag_custom != 0:
+                print(1)
+                delete_figure_agg(figure_agg)
 
+            fig4 = plt.figure(4)
+            fig4 = plt.gcf()
+            DPI = fig4.get_dpi()
+            fig4.set_size_inches(404 * 2 / float(DPI), 404 / float(DPI))
+            # -------------------------------
+            x = np.linspace(-5, 5)
+            y = (values_2['CUSTOM'])
+            plt.plot(x, y)
+            plt.title('y=f(x)')
+            plt.xlabel('X')
+            plt.ylabel('Y')
+            plt.grid()
+            figure_agg = draw_figure_w_toolbar(window_2['fig_cv'].TKCanvas, fig4, window_2['controls_cv'].TKCanvas)
+            flag_custom = 1
+        elif event_2 == 'Plot' and values_2['LOG'] == True:
+            # and values_2['INPUT A'] != None and values_2['INPUT B'] != None
+            if flag_linear != 0:
+                # ** IMPORTANT ** Clean up previous drawing before drawing again
+                print(1)
+                delete_figure_agg(figure_agg)
+                #plt.figure(3, clear = True)
+                #fig3 = None
+
+            fig3 = plt.figure(3)
+            fig3 = plt.gcf()
+            DPI = fig3.get_dpi()
+            # ------------------------------- you have to play with this size to reduce the movement error when the mouse hovers over the figure, it's close to canvas size
+            fig3.set_size_inches(404 * 2 / float(DPI), 404 / float(DPI))
+            # -------------------------------
+            x = np.linspace(-2, 2)
+            #x = np.linspace(-10, 10)
+            y = int((values_2['INPUT A'])) * x + int((values_2['INPUT B']))
+            #y = 2*x+4
+            plt.plot(x, y)
+            plt.title('y=f(x)')
+            plt.xlabel('X')
+            plt.ylabel('Y')
+            plt.grid()
+            figure_agg = draw_figure_w_toolbar(window_2['fig_cv'].TKCanvas, fig3, window_2['controls_cv'].TKCanvas)
+            flag_linear = 1
 window_2.close()
