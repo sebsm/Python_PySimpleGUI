@@ -1,3 +1,4 @@
+from tkinter.constants import Y
 import PySimpleGUI as sg
 import numpy as np
 """
@@ -8,8 +9,33 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.ticker as tck
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
+import ast
+import operator as op
 
+operators = {ast.Add: op.add, ast.Sub: op.sub, ast.Mult: op.mul,
+             ast.Div: op.truediv, ast.Pow: op.pow, ast.BitXor: op.xor,
+             ast.USub: op.neg}
 
+def eval_expr(expr):
+    """
+    >>> eval_expr('2^6')
+    4
+    >>> eval_expr('2**6')
+    64
+    >>> eval_expr('1 + 2*3**(4^5) / (6 + -7)')
+    -5.0
+    """
+    return eval_(ast.parse(expr, mode='eval').body)
+
+def eval_(node):
+    if isinstance(node, ast.Num): # <number>
+        return node.n
+    elif isinstance(node, ast.BinOp): # <left> <operator> <right>
+        return operators[type(node.op)](eval_(node.left), eval_(node.right))
+    elif isinstance(node, ast.UnaryOp): # <operator> <operand> e.g., -1
+        return operators[type(node.op)](eval_(node.operand))
+    else:
+        raise TypeError(node)
 # def draw_figure_w_toolbar(canvas, fig, canvas_toolbar):
 #     if canvas.children:
 #         for child in canvas.winfo_children():
@@ -69,6 +95,7 @@ layout_2 = [
 
 ]
 
+
 window_2_active = False
 window_2 = sg.Window('Graph with controls', layout_2)
 
@@ -91,6 +118,8 @@ def charts_window(window_1, window_2, window_2_active):
             window_2_active = False
             window_1.UnHide()
             break
+        elif event_2 == 'Check EQUATION':
+            sg.popup("Equation:",values_2['EQUATION'], type(values_2['EQUATION']))
         elif event_2 == 'Plot' and values_2['SIN'] == True:
             # ------------------------------- PASTE YOUR MATPLOTLIB CODE HERE
             if figure_agg:
@@ -173,8 +202,10 @@ def charts_window(window_1, window_2, window_2_active):
             DPI = fig4.get_dpi()
             fig4.set_size_inches(404 * 2 / float(DPI), 404 / float(DPI))
             # -------------------------------
-            x = np.linspace(-5, 5)
-            y = (values_2['CUSTOM'])
+            x = np.linspace(-5, 5, 20)
+            #y = eval_expr(str(values_2['EQUATION']))
+            y = eval(values_2['EQUATION'])
+            print(y)
             plt.plot(x, y)
             plt.title('y=f(x)')
             plt.xlabel('X')
